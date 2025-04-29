@@ -2,6 +2,9 @@
   "extends": ["@arthurrios/biome-config/node"],
   "linter": {
     "rules": {
+      "style": {
+        "noNonNullAssertion": "off"
+      },
       "suspicious": {
         "noConfusingVoidType": "off"
       }
