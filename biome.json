@@ -3,7 +3,8 @@
   "linter": {
     "rules": {
       "style": {
-        "noNonNullAssertion": "off"
+        "noNonNullAssertion": "off",
+        "useImportType": "off"
       },
       "suspicious": {
         "noConfusingVoidType": "off"
