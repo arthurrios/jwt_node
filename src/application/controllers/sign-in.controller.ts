@@ -8,7 +8,7 @@ const schema = z.object({
   password: z.string().min(8),
 })
 
-export class SignUpController implements IControler {
+export class SignInController implements IControler {
   constructor(private readonly signInUseCase: SignInUseCase) {}
 
   async handle({ body }: IRequest): Promise<IResponse> {
@@ -21,7 +21,7 @@ export class SignUpController implements IControler {
       })
 
       return {
-        statusCode: 204,
+        statusCode: 200,
         body: {
           accessToken,
         },
