@@ -1,9 +1,5 @@
 import { ZodIssue } from 'zod'
-
-export interface IRequest {
-  body: Record<string, unknown>
-  accountId: string | undefined
-}
+import { IRequest } from './IRequest'
 
 export interface IResponse {
   statusCode: number
