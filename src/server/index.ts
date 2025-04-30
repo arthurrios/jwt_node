@@ -3,15 +3,16 @@ import { SignUpUseCase } from '../application/use-cases/sign-up.use-case'
 import { SignUpController } from '../application/controllers/sign-up.controller'
 import { SignInUseCase } from '../application/use-cases/sign-in.use-case'
 import { SignInController } from '../application/controllers/sign-in.controller'
+import { makeSignUpUseCase } from '../factories/makeSignUpUseCase'
+import { makeSignUpController } from '../factories/makeSignUpController'
+import { makeSignInController } from '../factories/makeSignInController'
 
 const app = express()
 
 app.use(express.json())
 
 app.post('/sign-up', async (req, res) => {
-  const SALT = 12
-  const signUpUseCase = new SignUpUseCase(SALT)
-  const signUpController = new SignUpController(signUpUseCase)
+  const signUpController = makeSignUpController()
 
   const { statusCode, body } = await signUpController.handle({ body: req.body })
 
@@ -19,8 +20,7 @@ app.post('/sign-up', async (req, res) => {
 })
 
 app.post('/sign-in', async (req, res) => {
-  const signInUseCase = new SignInUseCase()
-  const signInController = new SignInController(signInUseCase)
+  const signInController = makeSignInController()
 
   const { statusCode, body } = await signInController.handle({ body: req.body })
 
