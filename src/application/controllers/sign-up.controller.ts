@@ -1,5 +1,5 @@
 import { z, ZodError } from 'zod'
-import { IControler, IRequest, IResponse } from '../interfaces/IControler'
+import { IController, IRequest, IResponse } from '../interfaces/IController'
 import { SignUpUseCase } from '../use-cases/sign-up.use-case'
 import { AccountAlreadyExists } from '../errors/AccountAlreadyExists'
 
@@ -9,7 +9,7 @@ const schema = z.object({
   password: z.string().min(8),
 })
 
-export class SignUpController implements IControler {
+export class SignUpController implements IController {
   constructor(private readonly signUpUseCase: SignUpUseCase) {}
 
   async handle({ body }: IRequest): Promise<IResponse> {
@@ -27,19 +27,20 @@ export class SignUpController implements IControler {
         body: null,
       }
     } catch (error) {
-      switch (error.constructor) {
-        case ZodError:
-          return {
-            statusCode: 400,
-            body: error.issues,
-          }
-        case AccountAlreadyExists:
-          return {
-            statusCode: 409,
-            body: {
-              error: error.message,
-            },
-          }
+      if (error instanceof ZodError) {
+        return {
+          statusCode: 400,
+          body: error.issues,
+        }
+      }
+
+      if (error instanceof AccountAlreadyExists) {
+        return {
+          statusCode: 409,
+          body: {
+            error: error.message,
+          },
+        }
       }
 
       throw error

@@ -1,5 +1,5 @@
 import { z, ZodError } from 'zod'
-import { IControler, IRequest, IResponse } from '../interfaces/IControler'
+import { IController, IRequest, IResponse } from '../interfaces/IController'
 import { SignInUseCase } from '../use-cases/sign-in.use-case'
 import { InvalidCrendentials } from '../errors/InvalidCredentials'
 
@@ -8,7 +8,7 @@ const schema = z.object({
   password: z.string().min(8),
 })
 
-export class SignInController implements IControler {
+export class SignInController implements IController {
   constructor(private readonly signInUseCase: SignInUseCase) {}
 
   async handle({ body }: IRequest): Promise<IResponse> {
@@ -27,19 +27,20 @@ export class SignInController implements IControler {
         },
       }
     } catch (error) {
-      switch (error.constructor) {
-        case ZodError:
-          return {
-            statusCode: 400,
-            body: error.issues,
-          }
-        case InvalidCrendentials:
-          return {
-            statusCode: 401,
-            body: {
-              error: 'Invalid credentials.',
-            },
-          }
+      if (error instanceof ZodError) {
+        return {
+          statusCode: 400,
+          body: error.issues,
+        }
+      }
+
+      if (error instanceof InvalidCrendentials) {
+        return {
+          statusCode: 401,
+          body: {
+            error: 'Invalid credentials.',
+          },
+        }
       }
 
       throw error
