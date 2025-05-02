@@ -8,6 +8,9 @@
       },
       "suspicious": {
         "noConfusingVoidType": "off"
+      },
+      "correctness": {
+        "noUnusedVariables": "warn"
       }
     }
   }

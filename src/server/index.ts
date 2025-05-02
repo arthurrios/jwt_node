@@ -18,14 +18,15 @@ app.post('/sign-in', routeAdapter(makeSignInController()))
 app.get(
   '/leads',
   middlewareAdapter(makeAuthenticationMiddleware()),
+  middlewareAdapter(makeAuthorizationMiddleware(['leads:read'])),
   routeAdapter(makeListLeadsController()),
 )
 
 app.post(
   '/leads',
   middlewareAdapter(makeAuthenticationMiddleware()),
-  middlewareAdapter(makeAuthorizationMiddleware(['ADMIN'])),
-  (req, res) => {
+  middlewareAdapter(makeAuthorizationMiddleware(['leads:write'])),
+  (_req, res) => {
     res.json({ created: true })
   },
 )

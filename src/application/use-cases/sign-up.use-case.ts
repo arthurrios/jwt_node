@@ -1,13 +1,12 @@
 import { hash } from 'bcryptjs'
 import { AccountAlreadyExists } from '../errors/AccountAlreadyExists'
 import { prismaClient } from '../lib/prisma/prismaClient'
-import { Role } from '../lib/prisma/generated'
 
 interface IInput {
   name: string
   email: string
   password: string
-  role: Role
+  roleId: string
 }
 
 type IOutput = void
@@ -15,7 +14,7 @@ type IOutput = void
 export class SignUpUseCase {
   constructor(private readonly salt: number) {}
 
-  async execute({ email, name, password, role }: IInput): Promise<IOutput> {
+  async execute({ email, name, password, roleId }: IInput): Promise<IOutput> {
     const accountAlreadyExists = await prismaClient.account.findUnique({
       where: {
         email,
@@ -33,7 +32,7 @@ export class SignUpUseCase {
         email,
         name,
         password: hashedPassword,
-        role: 'USER',
+        roleId,
       },
     })
   }

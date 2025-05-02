@@ -33,7 +33,7 @@ export class AuthenticationMiddleware implements IMiddleware {
           },
         },
       }
-    } catch (error) {
+    } catch (_error) {
       return {
         statusCode: 401,
         body: {
